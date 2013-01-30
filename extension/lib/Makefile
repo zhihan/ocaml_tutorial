@@ -2,8 +2,10 @@ CXX = g++
 SOURCES= myvector.cpp
 OBJS =$(SOURCES:.cpp=.o) 
 
+# Adding -no-exception to avoid link error on Cygwin
+
 %.o: %.cpp
-	$(CXX) -c -o $@ $<
+	$(CXX) -fno-exceptions -c -o $@ $<
 
 libmy.a: $(OBJS)
 

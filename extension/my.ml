@@ -12,6 +12,7 @@ module MyVector = struct
   external size: t-> int =
       "vector_size_stub"
 
+  (* Get a string for the vector *)
   let to_string (v:t) = 
     let n = size v in
     let a = ref "" in  

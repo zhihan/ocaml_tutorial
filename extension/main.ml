@@ -4,7 +4,9 @@ let main () =
   begin
     MyVector.append a 1.0;
     MyVector.append a 2.0;
-    
+
+    Printf.printf "a = %s\n" (MyVector.to_string a);
+
     Printf.printf "a[0] = %f\n" (MyVector.get a 0);
     Printf.printf "a[1] = %f\n" (MyVector.get a 1);
   end 

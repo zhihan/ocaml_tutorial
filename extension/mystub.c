@@ -69,3 +69,10 @@ value vector_get_stub(value vec, value i)
     CAMLreturn(result);
     
 }
+
+value vector_size_stub(value vec)
+{
+    CAMLparam1(vec);
+    realVector* v = Instance_val(vec);
+    CAMLreturn(Val_int(vector_size(v)));
+}

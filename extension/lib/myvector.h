@@ -14,6 +14,7 @@ extern "C" {
   void deleteVector(realVector* );
   double vector_get(realVector* , int);
   void vector_append(realVector* , double);
+    int vector_size(realVector*);
 
 #ifdef __cplusplus
 }

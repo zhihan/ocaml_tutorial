@@ -20,3 +20,8 @@ void vector_append(realVector* v, double x)
 {
   (*v).push_back(x);
 }
+
+int vector_size(realVector* v)
+{
+    return static_cast<int>((*v).size());
+}

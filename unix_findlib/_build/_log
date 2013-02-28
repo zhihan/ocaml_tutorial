@@ -1,0 +1,13 @@
+### Starting build.
+# Target: hello_unix.ml.depends, tags: { extension:ml, file:hello_unix.ml, ocaml, ocamldep, pkg_unix, quiet, traverse }
+/usr/local/bin/ocamlfind ocamldep -modules hello_unix.ml > hello_unix.ml.depends
+# Target: hello_unix.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:hello_unix.cmo, file:hello_unix.ml, implem, ocaml, pkg_unix, quiet, traverse }
+/usr/local/bin/ocamlfind ocamlc -c -o hello_unix.cmo hello_unix.ml
+# Target: hello_unix.byte, tags: { byte, dont_link_with, extension:byte, file:hello_unix.byte, link, ocaml, pkg_unix, program, quiet, traverse }
+/usr/local/bin/ocamlfind ocamlc -linkpkg hello_unix.cmo -o hello_unix.byte
++ /usr/local/bin/ocamlfind ocamlc -linkpkg hello_unix.cmo -o hello_unix.byte
+File "_none_", line 1, characters 0-1:
+Error: Error while linking hello_unix.cmo:
+Reference to undefined global `Unix'
+Command exited with code 2.
+# Compilation unsuccessful.

@@ -1,0 +1,3 @@
+let hello () = 
+  Printf.printf "Hello world\n"
+

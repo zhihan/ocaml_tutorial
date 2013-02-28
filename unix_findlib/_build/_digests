@@ -1,7 +1,0 @@
-"Rule: ocaml: ml & cmi -> cmx & o (%=hello_unix )": "x\226:\193V\219\181\222\227\159\230\2118RR\190"
-"Rule: ocaml: ml -> cmo & cmi (%=hello_unix )": "\229G2\194\005c&p\245\177\242\230\162\014+a"
-"Resource: /mathworks/devel/sandbox/zhan/work/ocaml_tutorial/unix_findlib/hello_unix.ml": "\178\230pV3`\166It\136\173\166\132\237\160f"
-"Resource: /mathworks/devel/sandbox/zhan/work/ocaml_tutorial/unix/hello_unix.ml": "\178\230pV3`\166It\136\173\166\132\237\160f"
-"Rule: ocaml dependencies ml (%=hello_unix )": "\209e\nH\018Z@\181[*\175\183/\131\161\148"
-"Rule: ocaml: cmx* & o* -> native (%=hello_unix )": "\188\180L:\192y\169\217\004\216IF\127\202{u"
-"Rule: ocaml: cmo* -> byte (%=hello_unix )": "\018\0151n\137\150\020F\135r\242\253\180\002\196^"

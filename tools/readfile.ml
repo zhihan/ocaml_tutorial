@@ -43,6 +43,11 @@ let read_inputs filename =
     close_in ic ;
     ()
     
-let _ = read_inputs Sys.argv.(1) ;;
+let _ = 
+  if (Array.length Sys.argv) != 2 
+  then 
+    Printf.printf " Usage: readfile <file> \n"
+  else
+    read_inputs Sys.argv.(1) ;;
   
 

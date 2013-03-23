@@ -1,9 +1,14 @@
+(** 
+    count_files Count the files and lines in all the subdirectories. 
+    Adapted from previous python code.
+*)
 open String
 open Filename
 open Sys
 open Unix
 
 module FileCounter = struct
+  (* Mutable data members to mimic object behavior in OCaml *)
   type t = { mutable f: int; 
 	     mutable l: int; 
 	     is: string->bool;

@@ -1,6 +1,5 @@
 open String
 open Filename
-open Arg
 open Unix
 
 module HB = struct
@@ -41,11 +40,19 @@ end
 
 let main () = 
   if Array.length Sys.argv > 1 then
-    let filename = Sys.argv.(1) in
-    let (source,target) = HB.get_source_target filename in
-    let title = "1" in 
+    (* Parse args *)
+    let filename = ref "" in
+    let title = ref "1" in 
+    let speclist = [
+      ("-t", Arg.String (fun s -> title := s), "title")] in
+    Arg.parse 
+      speclist
+      (fun (s:string) -> filename := s)
+      "usage " ;
+      
+    let (source,target) = HB.get_source_target !filename in
     let prog = "HandBrakeCLI" in 
-    let args = ["-i"; source; "-t"; title] @ (HB.common_options ()) 
+    let args = ["-i"; source; "-t"; !title] @ (HB.common_options ()) 
       @ ( HB.nokia_options () ) @  ["-o"; target^".mp4" ] in
 
     let _ = Sys.command (prog ^ " " ^ (String.concat " " args)) in

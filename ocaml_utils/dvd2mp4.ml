@@ -2,6 +2,7 @@ open String
 open Filename
 open Unix
 
+(* HandBrake setting module *)
 module HB = struct
   exception HBException of string
 
@@ -48,7 +49,7 @@ let main () =
     Arg.parse 
       speclist
       (fun (s:string) -> filename := s)
-      "usage " ;
+      "Usage dvd2mp4 file|directory [-t <title>] " ;
       
     let (source,target) = HB.get_source_target !filename in
     let prog = "HandBrakeCLI" in 

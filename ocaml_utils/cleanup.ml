@@ -1,4 +1,4 @@
-(* Use Str library *)
+(* Use Str and Unix library *)
 
 (** *)
 module FilenameUtil = struct

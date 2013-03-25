@@ -1,2 +1,3 @@
 <count_files.native> or <count_files.byte>: use_unix
+<cleanup.native> or <cleanup.byte> or <cleanup.d.byte>: use_str, use_unix
 

@@ -14,6 +14,7 @@ module FileCounter = struct
 	     is: string->bool;
 	     desc: string }
 
+  (* Count the number of lines in a source file *)
   let count (this:t) (filename:string):unit = 
     let ic = open_in filename in
     this.f <- this.f +1; 
@@ -54,6 +55,7 @@ let is_symbolic_link (fullname:string):bool =
   let st = lstat fullname in
   st.st_kind  = S_LNK
 
+(** Count *)
 let rec count_dir (d:string) (cl:FileCounter.t list) : unit = 
   let files = Sys.readdir d in
   Array.iter (fun (f:string) ->

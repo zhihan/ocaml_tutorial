@@ -64,6 +64,13 @@ module FilenameUtil = struct
   let is_ocamlbuild_dir (name:string):bool=
     let bname = Filename.basename name in
     bname = "_build"
+ 
+  let is_sldv_output_dir (fname:string): bool =
+    let bname = Filename.basename fname in
+    bname = "sldv_output"
+
+  let is_temp_dir (fname:string): bool = 
+    (is_ocamlbuild_dir fname) || (is_sldv_output_dir fname)
 
 end
 
@@ -82,7 +89,7 @@ let rec delete_temp_files ?force:(all=false) (dir:string) : unit =
     if (not (is_symbolic_link fullfile)) && 
       (not (is_unix_hidden f)) && 
       (Sys.is_directory fullfile ) then
-      if (is_ocamlbuild_dir fullfile) then
+      if (is_temp_dir fullfile) then
         delete_temp_files ~force:true fullfile
       else
         delete_temp_files fullfile

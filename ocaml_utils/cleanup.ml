@@ -1,6 +1,6 @@
 (* Use Str and Unix library *)
 
-(** *)
+(** Utility function to determine temporary files based on their name *)
 module FilenameUtil = struct
   let is_unix_hidden (name:string):bool = 
     let bname = Filename.basename name in
@@ -94,7 +94,7 @@ let rec delete_temp_files ?force:(all=false) (dir:string) : unit =
     if (not (is_symbolic_link fullfile)) && 
       (not (is_unix_hidden f)) && 
       (Sys.is_directory fullfile ) then
-      if (is_temp_dir fullfile) then
+      if (is_temp_dir fullfile) || all then
         delete_temp_files ~force:true fullfile
       else
         delete_temp_files fullfile

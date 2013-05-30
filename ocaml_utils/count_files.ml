@@ -38,7 +38,9 @@ module FileCounter = struct
       ()
 
   let print (this:t) : unit =
-    Printf.printf "%s:\n %d files, %d lines\n" this.desc this.f this.l
+    if this.f > 0 then
+      Printf.printf "%s:\n %d files, %d lines\n" this.desc this.f this.l
+    else ()
     
 end
 

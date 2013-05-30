@@ -69,8 +69,13 @@ module FilenameUtil = struct
     let bname = Filename.basename fname in
     bname = "sldv_output"
 
+  let is_slprj_dir (fname:string): bool =
+    let bname = Filename.basename fname in
+    bname = "slprj"
+
   let is_temp_dir (fname:string): bool = 
-    (is_ocamlbuild_dir fname) || (is_sldv_output_dir fname)
+    (is_ocamlbuild_dir fname) || (is_sldv_output_dir fname) || 
+      (is_slprj_dir fname)
 
 end
 

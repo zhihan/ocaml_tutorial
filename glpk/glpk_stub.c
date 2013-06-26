@@ -305,7 +305,7 @@ static void finalize_glp_smcp(value block) {
 }
 
 static struct custom_operations glp_smcp_ops = {
-    "glp_prob",
+    "glp_smcp",
     finalize_glp_smcp,
     custom_compare_default,
     custom_hash_default,
@@ -369,4 +369,76 @@ value glp_set_col_kind_stub(value t, value idx, value kind)
   }
   glp_set_col_kind(lp, i, kind_enum);
   CAMLreturn(Val_unit);
+}
+
+#define Glp_iocp_val(v) (*(glp_iocp**) Data_custom_val(v))
+
+static void finalize_glp_iocp(value block){
+    free Glp_iocp_val(block);
+}
+
+static struct custom_operations glp_iocp_ops = {
+    "glp_iocp",
+    finalize_glp_iocp,
+    custom_compare_default,
+    custom_hash_default,
+    custom_serialize_default,
+    custom_deserialize_default,
+    custom_compare_ext_default
+};    
+
+
+value glp_iocp_init_stub(value unit)
+{
+    CAMLparam1(unit);
+    glp_iocp* p = malloc(sizeof(glp_iocp));
+    (void) glp_init_iocp(p);
+    value result = caml_alloc_custom(&glp_iocp_ops,
+                                     sizeof(glp_iocp*),
+                                     0, 1);
+    Glp_iocp_val(result) = p;
+    CAMLreturn(result);
+}
+
+value glp_intopt_stub(value t, value p)
+{
+    CAMLparam2(t, p);
+    glp_prob* mip = Glp_prob_val(t);
+    glp_iocp* opt = Glp_iocp_val(p);
+    int ret = glp_intopt(mip, opt);
+    CAMLreturn(Int_val(ret));
+}
+
+value glp_mip_obj_val_stub(value t)
+{
+    CAMLparam1(t);
+    glp_prob* mip = Glp_prob_val(t);
+    double v = glp_mip_obj_val(mip);
+    CAMLreturn(caml_copy_double(v));
+}
+
+value glp_mip_row_val_stub(value t, value idx)
+{
+  CAMLparam2(t, idx);
+  int i = Int_val(idx);
+  glp_prob* lp = Glp_prob_val(t);
+  double v = glp_mip_row_val(lp, i);
+  CAMLreturn(caml_copy_double(v));
+}
+
+value glp_mip_col_val_stub(value t, value idx)
+{
+  CAMLparam2(t, idx);
+  int i = Int_val(idx);
+  glp_prob* lp = Glp_prob_val(t);
+  double v = glp_mip_col_val(lp, i);
+  CAMLreturn(caml_copy_double(v));
+}
+
+value glp_iocp_enable_presolver(value t)
+{
+    CAMLparam1(t);
+    glp_iocp* p = Glp_iocp_val(t);
+    p->presolve = GLP_ON;
+    CAMLreturn(Val_unit);
 }

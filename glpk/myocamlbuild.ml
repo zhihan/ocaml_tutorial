@@ -20,14 +20,14 @@ dispatch begin function
 	(S[
 	  A"-cclib"; A"-L/opt/local/lib"; (* macport install of glpk *)
           A"-cclib"; A"-L."; A"-cclib"; A"-lglpk_stub";
-           A"-cclib"; A"-lglpk" (* The actual library *)
+           A"-cclib"; A"-lglpk"; (* The actual library *)
 	]);
 
       flag ["ocaml"; "byte"; "mktop"; "use_glpk"]
 	(S[ A"-custom"; 
 	    A"-cclib"; A"-L/opt/local/lib"; (* macport install of glpk *)
 	    A"-cclib"; A"-L."; A"-cclib"; A"-lglpk_stub";
-            A"-cclib"; A"-lglpk"
+            A"-cclib"; A"-lglpk"; 
           ]);
       
       dep["ocaml"; "use_glpk"] ["libglpk_stub.a"]

@@ -5,6 +5,12 @@ module Glp_smcp = struct
   external disable_display: t -> unit = "glp_smcp_disable_display"
 end
 
+module Glp_iocp = struct
+  type t
+  external init: unit -> t = "glp_iocp_init_stub"
+  external enable_presolver: t -> unit = "glp_iocp_enable_presolver"
+end
+
 (* LP Problem settings *)
 module Glp_prob = struct
   type t
@@ -73,9 +79,19 @@ module Glp_prob = struct
   external simplex: t -> Glp_smcp.t -> int = 
     "simplex_stub" 
 
+  external intopt: t -> Glp_iocp.t -> int = 
+      "glp_intopt_stub" 
+
   (* Results *)
+
+  (* Simplex method *)
   external get_obj_val: t -> float = "get_obj_val_stub"
   external get_col_prim: t -> int -> float = "glp_get_col_prim_stub"
+
+  (* MIP *)
+  external mip_obj_val: t -> float = "glp_mip_obj_val_stub"
+  external mip_row_val: t -> int -> float = "glp_mip_row_val_stub"
+  external mip_col_val: t -> int -> float = "glp_mip_col_val_stub"
 
 end
 

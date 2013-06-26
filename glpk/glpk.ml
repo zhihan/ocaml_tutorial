@@ -1,10 +1,11 @@
+(* Control parameter for LP *)
 module Glp_smcp = struct
   type t
   external init: unit -> t = "glp_smcp_init_stub"
   external disable_display: t -> unit = "glp_smcp_disable_display"
 end
 
-
+(* LP Problem settings *)
 module Glp_prob = struct
   type t
 

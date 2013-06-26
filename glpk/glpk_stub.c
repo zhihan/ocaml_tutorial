@@ -180,6 +180,65 @@ value set_col_name_stub(value t, value idx, value name)
     CAMLreturn(Val_unit);
 }
 
+value get_col_name_stub(value t, value idx)
+{
+    CAMLparam2(t, idx);
+    int i = Int_val(idx);
+    glp_prob* p = Glp_prob_val(t);
+    const char* r = glp_get_col_name(p, i);
+    CAMLreturn(caml_copy_string(r));
+}
+
+value set_col_bnds_free_stub(value t, value idx)
+{
+    CAMLparam2(t, idx);
+    glp_prob* p = Glp_prob_val(t);
+    int i = Int_val(idx);
+    glp_set_col_bnds(p, i, GLP_FR, 0.0, 0.0);
+    CAMLreturn(Val_unit);
+}
+
+value set_col_bnds_lower_stub(value t, value idx, value lb)
+{
+    CAMLparam3(t, idx, lb);
+    glp_prob* p = Glp_prob_val(t);
+    int i = Int_val(idx);
+    double l = Double_val(lb);
+    glp_set_col_bnds(p, i, GLP_LO, l, 0.0);
+    CAMLreturn(Val_unit);
+}
+value set_col_bnds_upper_stub(value t, value idx, value ub)
+{
+    CAMLparam3(t, idx, ub);
+    glp_prob* p = Glp_prob_val(t);
+    int i = Int_val(idx);
+    double l = Double_val(ub);
+    glp_set_col_bnds(p, i, GLP_UP, 0.0, l);
+    CAMLreturn(Val_unit);
+}
+
+value set_col_bnds_fixed_stub(value t, value idx, value ub)
+{
+    CAMLparam3(t, idx, ub);
+    glp_prob* p = Glp_prob_val(t);
+    int i = Int_val(idx);
+    double l = Double_val(ub);
+    glp_set_col_bnds(p, i, GLP_FX, l, l);
+    CAMLreturn(Val_unit);
+}
+
+value set_col_bnds_double_stub(value t, value idx, value lb, value ub)
+{
+    CAMLparam4(t, idx, lb, ub);
+    glp_prob* p = Glp_prob_val(t);
+    int i = Int_val(idx);
+    double l = Double_val(lb);
+    double u = Double_val(ub);
+    glp_set_col_bnds(p, i, GLP_DB, l, u);
+    CAMLreturn(Val_unit);
+}
+
+
 value load_matrix_stub(value t, value num, value I, value J, value v)
 {
     CAMLparam5(t, num, I, J, v);
@@ -209,4 +268,106 @@ value load_matrix_stub(value t, value num, value I, value J, value v)
     free(ar);
     CAMLreturn(Val_unit);
     
+}
+
+value set_obj_coeff_stub(value t, value idx, value a)
+{
+    CAMLparam3(t, idx, a);
+    glp_prob* p = Glp_prob_val(t);
+    int i = Int_val(idx);
+    double c = Double_val(a);
+    glp_set_obj_coef(p, i, c);
+    CAMLreturn(Val_unit);
+}
+
+
+value get_obj_val_stub(value t)
+{
+    CAMLparam1(t);
+    glp_prob* lp = Glp_prob_val(t);
+    double v = glp_get_obj_val(lp);
+    CAMLreturn(caml_copy_double(v));
+}
+
+value glp_get_col_prim_stub(value t, value idx)
+{
+  CAMLparam2(t, idx);
+  int i = Int_val(idx);
+  glp_prob* lp = Glp_prob_val(t);
+  double v = glp_get_col_prim(lp, i);
+  CAMLreturn(caml_copy_double(v));
+}
+
+/* Boiler plate for declaring custom objects */
+#define Glp_smcp_val(v) (*(glp_smcp**) Data_custom_val(v))
+
+static void finalize_glp_smcp(value block) {
+    free Glp_prob_val(block);
+}
+
+static struct custom_operations glp_smcp_ops = {
+    "glp_prob",
+    finalize_glp_smcp,
+    custom_compare_default,
+    custom_hash_default,
+    custom_serialize_default,
+    custom_deserialize_default,
+    custom_compare_ext_default
+};    
+
+value glp_smcp_init_stub(value unit)
+{
+    CAMLparam1(unit);
+    glp_smcp* p = malloc(sizeof(glp_smcp));
+    (void) glp_init_smcp(p); /* why int */
+    value result = caml_alloc_custom(&glp_smcp_ops,
+                                     sizeof(glp_smcp*),
+                                     0, 1);
+    Glp_smcp_val(result) = p;
+    CAMLreturn(result);
+}
+
+value glp_smcp_disable_display(value t)
+{
+    CAMLparam1(t);
+    glp_smcp* p = Glp_smcp_val(t);
+    p->msg_lev = GLP_MSG_OFF;
+    CAMLreturn(Val_unit);
+}
+
+value simplex_stub(value t, value opt) 
+{
+  CAMLparam2(t, opt);
+  glp_prob* lp = Glp_prob_val(t);
+  glp_smcp* param = Glp_smcp_val(opt);
+  int ret = glp_simplex(lp, param);
+  CAMLreturn(Int_val(ret));
+}
+
+
+/* MIP settings */
+
+value glp_set_col_kind_stub(value t, value idx, value kind)
+{
+  CAMLparam3(t, idx, kind);
+  glp_prob* lp = Glp_prob_val(t);
+  int i = Int_val(idx);
+  
+  int kind_enum_type = Int_val(kind);
+  int kind_enum; 
+  switch (kind_enum_type) {
+  case 0: /* Real */
+    kind_enum = GLP_CV;
+    break;
+  case 1:
+    kind_enum = GLP_IV;
+    break;
+  case 2:
+    kind_enum = GLP_BV;
+    break;
+  default:
+    break;
+  }
+  glp_set_col_kind(lp, i, kind_enum);
+  CAMLreturn(Val_unit);
 }

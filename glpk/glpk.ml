@@ -1,3 +1,9 @@
+(* OCaml bindings for the GNU Linear Programming Kit (glpk)
+   
+   GNU Linear Programming Kit is an efficient large-scale LP solver.
+   available at http://www.gnu.org/software/glpk
+   
+ *)
 module Glp_prob = struct
   type t
 

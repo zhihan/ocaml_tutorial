@@ -208,5 +208,4 @@ value load_matrix_stub(value t, value num, value I, value J, value v)
     free(ja);
     free(ar);
     CAMLreturn(Val_unit);
-    
 }

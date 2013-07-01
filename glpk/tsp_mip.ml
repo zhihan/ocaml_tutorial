@@ -2,7 +2,7 @@
 open Glpk
 open Glp_prob
 open Matrix
-open Parse_input
+open Parse_input_tsp
 open Util
 
 let edgeIdx i j n = 

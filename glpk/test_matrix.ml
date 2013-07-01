@@ -55,6 +55,16 @@ let test_vertcat () =
   let b = Triplet.vertcat a a in
   print_endline (Triplet.to_string b)
 
+
+let test_dense () =
+  let a = [[1. ;2.];[3.; 4.]] in
+  let mat = Dense.of_list 2 2 a in
+  let (x,y) = Dense.size mat in
+  begin
+    Printf.printf "%d by %d\n" x y ;
+    print_endline (Dense.to_string mat)
+  end
+
 let _ = 
   begin
     test1 ();
@@ -62,6 +72,7 @@ let _ =
     test_unzip ();
     test_normalize ();
     test_horzcat ();
-    test_vertcat ()
+    test_vertcat ();
+    test_dense ()
   end
     

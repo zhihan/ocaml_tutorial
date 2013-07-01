@@ -1,3 +1,5 @@
+(* Basic matrix computations *) 
+
 let zip_list a b = 
   let rec loop x y acc = 
     match (x,y) with
@@ -28,6 +30,9 @@ let unzip_array a =
     (r1, r2)
   end
 
+let array_to_string (d: float array) = 
+  Array.fold_left (fun s e -> s ^ " " ^ (string_of_float e)) "" d
+
 (* Shift indices by k *)
 let shifted (idx:int array) (k:int) = 
   let result = Array.copy idx in
@@ -37,6 +42,7 @@ let shifted (idx:int array) (k:int) =
     done;
     result
   end
+
     
 module Triplet = struct
   (* 1-based matrix for use with glpk *)
@@ -151,4 +157,64 @@ module Triplet = struct
             mat
           end
             
+end
+
+(* A very simple dense matrix implementation *)
+module Dense = struct
+  type t = int * int * float array
+
+  let  size mat = match mat with
+    | (m,n,_) -> (m,n)
+      
+  let of_list m n l = 
+    let data = Array.create (m*n) 0. in
+    let offset = ref 0 in
+    let rec add_entry remain =
+      match remain with
+        | h::tl -> 
+          begin
+            data.(!offset) <- h;
+            offset := !offset + 1;
+            add_entry tl
+          end
+        | [] -> ()
+    in
+    let rec add_row remain = 
+      match remain with
+        | h::tl -> 
+          begin
+            add_entry h;
+            add_row tl
+          end
+        | [] -> ()
+    in
+    begin
+      add_row l;
+      (m, n, data)
+    end
+
+  let to_string mat = 
+    let a_row m n i data = 
+      let s = ref "[" in
+      begin
+        for j=0 to n-1 do
+          s := !s ^ (string_of_float data.(i*n + j)) ^ " ";
+        done;
+        !s ^ "]\n"
+      end
+    in
+    match mat with 
+      | (m,n,data) ->
+        let s = ref "" in
+        begin
+          for i=0 to m-1 do
+            s := !s ^ (a_row m n i data)
+          done;
+          !s
+        end
+          
+  let get mat i j = 
+    match mat with 
+      | (m,n,data) -> data.(i*n + j)
+
 end

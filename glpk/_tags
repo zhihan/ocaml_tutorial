@@ -1,2 +1,2 @@
-true: use_glpk
+true: use_glpk, use_str
 <*.ml>: annot

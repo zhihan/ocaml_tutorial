@@ -406,8 +406,7 @@ value glp_intopt_stub(value t, value p)
     glp_prob* mip = Glp_prob_val(t);
     glp_iocp* opt = Glp_iocp_val(p);
     int ret = glp_intopt(mip, opt);
-
-    (void) glp_print_sol(mip, "debug.log");
+    
     CAMLreturn(Int_val(ret));
 }
 
@@ -443,5 +442,6 @@ value glp_iocp_enable_presolver(value t)
     glp_iocp* p = Glp_iocp_val(t);
     p->presolve = GLP_ON;
     p->msg_lev = GLP_MSG_ALL;
+    p->tm_lim = 16000000; /* 16000 seconds */
     CAMLreturn(Val_unit);
 }

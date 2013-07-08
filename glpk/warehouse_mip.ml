@@ -43,6 +43,7 @@ let solve_warehouse_mip m n cap setup demand trans =
       done;
     done;
 
+(*
     add_rows mip m; (* Capacity is not violated *)
     let capacity_mat = Triplet.create m (m+m*n) (m*n+m) in
     let off = ref 0 in
@@ -54,6 +55,22 @@ let solve_warehouse_mip m n cap setup demand trans =
       off := !off + 1;
       for j = 0 to n-1 do
         Triplet.set capacity_mat !off (i+1) (m + i*n+j+1) (demand.(j));
+        off := !off +1;
+      done
+    done;
+*)
+
+    add_rows mip m; (* Warehouse must be open if has customer *)
+    let capacity_mat = Triplet.create m (m+m*n) (m*n+m) in
+    let off = ref 0 in
+    for i = 0 to m-1 do
+      set_row_name mip (n+i+1) ("Operation at " ^ (string_of_int i));
+      set_row_bnds_upper mip (n+i+1) 0.0; (* sum_i - n*s <=0 *)
+      
+      Triplet.set capacity_mat !off (i+1) (i+1) (-. (float_of_int n));
+      off := !off + 1;
+      for j = 0 to n-1 do
+        Triplet.set capacity_mat !off (i+1) (m + i*n+j+1) (1.0);
         off := !off +1;
       done
     done;

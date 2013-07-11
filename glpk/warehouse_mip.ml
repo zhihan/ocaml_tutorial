@@ -43,6 +43,7 @@ let solve_warehouse_mip m n cap setup demand trans =
       done;
     done;
 
+(*
     add_rows mip m; (* Capacity is not violated *)
     let capacity_mat = Triplet.create m (m+m*n) (m*n+m) in
     let off = ref 0 in
@@ -58,7 +59,8 @@ let solve_warehouse_mip m n cap setup demand trans =
       done
     done;
 
-    let a = Triplet.vertcat demand_mat capacity_mat in
+*)
+    let a = demand_mat in
     load_matrix mip (Triplet.nnz a) (
       Triplet.row_index a) (Triplet.col_index a) (Triplet.value a);
 

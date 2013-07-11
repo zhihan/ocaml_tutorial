@@ -33,11 +33,30 @@ module HB = struct
   let common_options() = ["-e"; "x264"; "--two-pass"; "-T"]
 
   let nokia_options () = ["--format mp4"; "-b"; "2000"; "-E"; "copy:ac3"]
+ 
+  let iphone_options () = ["--format mp4"; "-b"; "2000"; "-E"; "faac"]
 
   let strict_anamorphic () = ["--strict-anamorphic"]
      
 end
 
+let substr s pt = 
+  let n = length pt in
+  if (length s) < n then false
+  else 
+    begin
+      let i = ref 0 in
+      let off = ref (-1) in
+      begin
+	while (!i <= (length s) - n) && (!off < 0) do
+	  if (sub s !i n) = pt then
+	    off := !i
+	  else
+	    i := !i + 1
+	done;
+	!off >= 0 
+      end
+    end
 
 let main () = 
   if Array.length Sys.argv > 1 then
@@ -53,8 +72,13 @@ let main () =
       
     let (source,target) = HB.get_source_target !filename in
     let prog = "HandBrakeCLI" in 
+    
+    let audio_options = if (substr source "VIDEO_TS") then
+	HB.nokia_options () 
+      else
+	HB.iphone_options () in
     let args = ["-i"; source; "-t"; !title] @ (HB.common_options ()) 
-      @ ( HB.nokia_options () ) @  ["-o"; target^".mp4" ] in
+      @ audio_options  @  ["-o"; target^".mp4" ] in
 
     let _ = Sys.command (prog ^ " " ^ (String.concat " " args)) in
     ()

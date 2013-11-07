@@ -30,12 +30,22 @@ let count_file_or_dir (d:string) (f:string) (
 
 let is_empty_line line = 
   let reg = Str.regexp "[ ]+" in
-  Str.string_match reg line 0 
+  ((String.length line)==0) || (Str.string_match reg line 0)
+
+let trim_line (line:string): string = 
+  if String.contains line '#' then
+    (* Remove comments *)
+    let idx = String.index line '#' in
+    let no_comments = String.sub line 0 idx in
+    String.trim no_comments
+  else 
+    String.trim line
 
 let process_lines (d:string) (l:string list) (
   cl:FileCounter.t list): unit = 
-  List.iter (fun x -> 
-    if not(is_empty_line x )  then
+  List.iter (fun line -> 
+    let x = trim_line line in
+    if not(is_empty_line x ) then
       count_file_or_dir d x cl
     else () ) l
 
@@ -45,7 +55,7 @@ let main () =
     let ic = open_in profile in
     let cwd = Sys.getcwd () in
     let lines = read_lines ic in
-
+    (* let _ = List.iter (fun x -> print_string x) lines in *)
     let is_cpp = fun n ->
       (check_suffix n ".cpp") || (check_suffix n ".hpp" ) ||
         (check_suffix n ".c") || (check_suffix n ".h")
